@@ -1,8 +1,8 @@
-use crate::solution::SolutionFactory;
+use crate::challenge::ChallengeFactory;
 use clap::{command, Arg};
 use std::{fs::File, path::Path};
 
-mod solution;
+mod challenge;
 mod utils;
 
 fn main() {
@@ -42,7 +42,8 @@ fn main() {
         path.display()
     ));
 
-    let solution = SolutionFactory::create(&challenge, &file);
+    let solution = ChallengeFactory::create(&challenge, &file);
 
-    println!("{}", solution.solve());
+    println!("Part One: {}", solution.solvePartOne());
+    println!("Part Two: {}", solution.solvePartTwo());
 }
