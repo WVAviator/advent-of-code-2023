@@ -3,8 +3,8 @@ use std::fs::File;
 mod trebuchet;
 
 pub trait Challenge {
-    fn solvePartOne(&self) -> String;
-    fn solvePartTwo(&self) -> String;
+    fn solve_part_one(&self) -> String;
+    fn solve_part_two(&self) -> String;
     fn load(&mut self, file: &File);
 }
 

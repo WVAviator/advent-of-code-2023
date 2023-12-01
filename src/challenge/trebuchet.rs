@@ -12,10 +12,10 @@ impl Challenge for Trebuchet {
     fn load(&mut self, file: &File) {
         self.data = to_lines_vec(file).join("\n");
     }
-    fn solvePartOne(&self) -> String {
+    fn solve_part_one(&self) -> String {
         format!("Not implemented yet!")
     }
-    fn solvePartTwo(&self) -> String {
+    fn solve_part_two(&self) -> String {
         format!("Not implemented yet!")
     }
 }

@@ -44,6 +44,6 @@ fn main() {
 
     let solution = ChallengeFactory::create(&challenge, &file);
 
-    println!("Part One: {}", solution.solvePartOne());
-    println!("Part Two: {}", solution.solvePartTwo());
+    println!("Part One: {}", solution.solve_part_one());
+    println!("Part Two: {}", solution.solve_part_two());
 }
