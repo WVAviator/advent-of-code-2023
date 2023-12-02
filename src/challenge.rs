@@ -1,5 +1,6 @@
 use std::fs::File;
 
+mod cube_conundrum;
 mod trebuchet;
 
 pub trait Challenge {
@@ -12,8 +13,9 @@ pub struct ChallengeFactory;
 
 impl ChallengeFactory {
     pub fn create(challenge_id: &u8, file: &File) -> Box<dyn Challenge> {
-        let mut solution = match challenge_id {
+        let mut solution: Box<dyn Challenge> = match challenge_id {
             1 => Box::new(trebuchet::Trebuchet::default()),
+            2 => Box::new(cube_conundrum::CubeConundrum::default()),
             _ => panic!("Challenge {} not implemented yet!", challenge_id),
         };
 
