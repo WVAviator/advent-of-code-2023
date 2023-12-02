@@ -2,8 +2,8 @@ use super::cube_subset::CubeSubset;
 
 #[derive(Debug, PartialEq)]
 pub struct CubeGame {
+    pub id: u32,
     subsets: Vec<CubeSubset>,
-    id: u32,
 }
 
 impl CubeGame {
@@ -11,6 +11,15 @@ impl CubeGame {
         let id = CubeGame::extract_game_id(line);
         let subsets = CubeGame::extract_game_segments(line);
         CubeGame { subsets, id }
+    }
+
+    pub fn is_possible(&self, max_red: u32, max_green: u32, max_blue: u32) -> bool {
+        for subset in &self.subsets {
+            if subset.red > max_red || subset.green > max_green || subset.blue > max_blue {
+                return false;
+            }
+        }
+        return true;
     }
 
     fn extract_game_id(line: &str) -> u32 {

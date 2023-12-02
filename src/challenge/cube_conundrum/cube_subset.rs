@@ -1,9 +1,9 @@
 #[derive(Debug, PartialEq)]
 
 pub struct CubeSubset {
-    red: u32,
-    green: u32,
-    blue: u32,
+    pub red: u32,
+    pub green: u32,
+    pub blue: u32,
 }
 
 impl CubeSubset {
