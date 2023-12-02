@@ -50,6 +50,7 @@ impl CubeConundrum {
     }
 }
 
+#[cfg(test)]
 mod test {
     use super::*;
 

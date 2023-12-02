@@ -82,6 +82,7 @@ impl Trebuchet {
     }
 }
 
+#[cfg(test)]
 mod test {
     use super::*;
 
