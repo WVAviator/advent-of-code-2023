@@ -1,4 +1,5 @@
 use super::cube_subset::CubeSubset;
+use std::cmp::max;
 
 #[derive(Debug, PartialEq)]
 pub struct CubeGame {
@@ -20,6 +21,25 @@ impl CubeGame {
             }
         }
         return true;
+    }
+
+    pub fn get_power(&self) -> u32 {
+        let (red, green, blue) = self.min_required();
+        let power = red * green * blue;
+
+        power
+    }
+
+    fn min_required(&self) -> (u32, u32, u32) {
+        let mut red = 0;
+        let mut green = 0;
+        let mut blue = 0;
+        for subset in &self.subsets {
+            red = max(red, subset.red);
+            green = max(green, subset.green);
+            blue = max(blue, subset.blue);
+        }
+        (red, green, blue)
     }
 
     fn extract_game_id(line: &str) -> u32 {
@@ -120,5 +140,31 @@ mod test {
         ];
 
         assert_eq!(game.subsets, expected);
+    }
+
+    #[test]
+    fn ch02_cubegame_min_required() {
+        let line = "Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green";
+        let game = CubeGame::new(line);
+        let (red, green, blue) = game.min_required();
+        assert_eq!(red, 4);
+        assert_eq!(green, 2);
+        assert_eq!(blue, 6);
+    }
+
+    #[test]
+    fn ch02_cubegame_get_power() {
+        let line = "Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green";
+        let game = CubeGame::new(line);
+        let power = game.get_power();
+        assert_eq!(power, 48);
+    }
+
+    #[test]
+    fn ch02_cubegame_get_power_2() {
+        let line = "Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red";
+        let game = CubeGame::new(line);
+        let power = game.get_power();
+        assert_eq!(power, 1560);
     }
 }
