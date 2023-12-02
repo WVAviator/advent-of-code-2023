@@ -86,7 +86,7 @@ mod test {
     use super::*;
 
     #[test]
-    fn get_first_and_last_digit() {
+    fn ch01_get_first_and_last_digit() {
         let line = "aerv5ndsfjvn8anrve9erferf2fwef";
         let (first, last) = Trebuchet::get_first_and_last_digits(line);
         assert_eq!(first, '5');
@@ -94,7 +94,7 @@ mod test {
     }
 
     #[test]
-    fn get_first_and_last_digit_with_one_digit() {
+    fn ch01_get_first_and_last_digit_with_one_digit() {
         let line = "esirvioernivoen5aiorjnvioerjogeij";
         let (first, last) = Trebuchet::get_first_and_last_digits(line);
         assert_eq!(first, '5');
@@ -102,7 +102,7 @@ mod test {
     }
 
     #[test]
-    fn test_part_one() {
+    fn ch01_test_part_one() {
         let mut trebuchet = Trebuchet::default();
         trebuchet.lines = vec![
             String::from("1abc2"),
@@ -114,7 +114,7 @@ mod test {
     }
 
     #[test]
-    fn get_first_and_last_numstr_or_digit() {
+    fn ch01_get_first_and_last_numstr_or_digit() {
         let line = "rehfujoneruvjeu4rjvijefiveuerfijer8fnjrnbv";
         let (first, last) = Trebuchet::get_first_and_last_numstr_or_digit(line);
         assert_eq!(first, '1');
@@ -122,7 +122,7 @@ mod test {
     }
 
     #[test]
-    fn get_first_and_last_numstr_or_digit_with_one_digit() {
+    fn ch01_get_first_and_last_numstr_or_digit_with_one_digit() {
         let line = "eruvjneiruvnfoureruvn";
         let (first, last) = Trebuchet::get_first_and_last_numstr_or_digit(line);
         assert_eq!(first, '4');
@@ -130,28 +130,28 @@ mod test {
     }
 
     #[test]
-    fn find_all_number_substrings() {
+    fn ch01_find_all_number_substrings() {
         let line = "seightwooneqxcfgszninesvfcnxc68";
         let substrings = Trebuchet::find_all_number_substrings(line);
         assert_eq!(substrings, vec!['8', '2', '1', '9', '6', '8']);
     }
 
     #[test]
-    fn find_all_number_substrings_single() {
+    fn ch01_find_all_number_substrings_single() {
         let line = "eruvjneiruvnfoureruvn";
         let substrings = Trebuchet::find_all_number_substrings(line);
         assert_eq!(substrings, vec!['4']);
     }
 
     #[test]
-    fn find_all_number_substrings_none() {
+    fn ch01_find_all_number_substrings_none() {
         let line = "eruvjneiruvnforeruvn";
         let substrings = Trebuchet::find_all_number_substrings(line);
         assert!(substrings.is_empty());
     }
 
     #[test]
-    fn final_all_number_substrings_repeated_substrings() {
+    fn ch01_final_all_number_substrings_repeated_substrings() {
         let line = "oneone33oneonefourfourfouroneonefour33four";
         let substrings = Trebuchet::find_all_number_substrings(line);
         assert_eq!(
@@ -161,7 +161,7 @@ mod test {
     }
 
     #[test]
-    fn find_all_number_substrings_finds_all_types() {
+    fn ch01_find_all_number_substrings_finds_all_types() {
         let line = "onetwothreefourfivesixseveneightnine123456789";
         let substrings = Trebuchet::find_all_number_substrings(line);
         assert_eq!(
@@ -174,7 +174,7 @@ mod test {
     }
 
     #[test]
-    fn test_part_two() {
+    fn ch01_test_part_two() {
         let mut trebuchet = Trebuchet::default();
         trebuchet.lines = vec![
             String::from("two1nine"),
@@ -189,7 +189,7 @@ mod test {
     }
 
     #[test]
-    fn test_part_two_all_possible() {
+    fn ch01_test_part_two_all_possible() {
         let mut trebuchet = Trebuchet::default();
         trebuchet.lines = vec![
             String::from("one384h3two1"),
@@ -206,7 +206,7 @@ mod test {
     }
 
     #[test]
-    fn test_part_two_2() {
+    fn ch01_test_part_two_2() {
         let mut trebuchet = Trebuchet::default();
         trebuchet.lines = vec![
             String::from("f3"),                                                // 33
