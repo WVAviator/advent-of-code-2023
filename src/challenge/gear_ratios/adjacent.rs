@@ -38,7 +38,7 @@ impl<'a, T> Adjacent<'a, T> {
 }
 
 impl<'a, T: Copy> Iterator for Adjacent<'a, T> {
-    type Item = T;
+    type Item = (T, usize, usize);
     fn next(&mut self) -> Option<Self::Item> {
         while self.offset_index < self.offset_cells.len() {
             let (row, col) = self.offset_cells[self.offset_index];
@@ -46,7 +46,7 @@ impl<'a, T: Copy> Iterator for Adjacent<'a, T> {
 
             if let Some(matrix_row) = self.matrix.get(row) {
                 if let Some(matrix_cell) = matrix_row.get(col) {
-                    return Some(matrix_cell.clone());
+                    return Some((matrix_cell.clone(), row, col));
                 }
             }
         }
@@ -72,7 +72,7 @@ mod test {
         let matrix = get_matrix();
 
         let adjacent = Adjacent::new(&matrix, (2, 2));
-        let collected_iter: Vec<u8> = adjacent.collect();
+        let collected_iter: Vec<u8> = adjacent.map(|(ch, _, _)| ch).collect();
 
         let expected = vec![2, 3, 4, 2, 4, 2, 3, 4];
         assert_eq!(collected_iter, expected);
@@ -82,7 +82,7 @@ mod test {
     fn ch03_adjacent_edge() {
         let matrix = get_matrix();
         let adjacent = Adjacent::new(&matrix, (0, 1));
-        let collected_iter: Vec<u8> = adjacent.collect();
+        let collected_iter: Vec<u8> = adjacent.map(|(ch, _, _)| ch).collect();
 
         let expected = vec![1, 3, 1, 2, 3];
         assert_eq!(collected_iter, expected);

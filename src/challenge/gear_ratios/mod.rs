@@ -7,6 +7,7 @@ use std::fs::File;
 
 mod adjacent;
 mod engine_schematic;
+mod gear;
 mod part_number;
 
 #[derive(Default)]
@@ -29,7 +30,13 @@ impl Challenge for GearRatios {
         format!("{}", total)
     }
     fn solve_part_two(&self) -> String {
-        format!("Not implemented yet!")
+        let total: u32 = self
+            .engine_schematic
+            .get_gear_ratios_adjacent_to_two_numbers()
+            .iter()
+            .sum();
+
+        format!("{}", total)
     }
 }
 
@@ -59,5 +66,14 @@ mod test {
         gear_ratios.engine_schematic = EngineSchematic::new(input);
 
         assert_eq!(gear_ratios.solve_part_one(), "4361");
+    }
+
+    #[test]
+    fn ch03_part_two() {
+        let input = get_test_input();
+        let mut gear_ratios = GearRatios::default();
+        gear_ratios.engine_schematic = EngineSchematic::new(input);
+
+        assert_eq!(gear_ratios.solve_part_two(), "467835");
     }
 }

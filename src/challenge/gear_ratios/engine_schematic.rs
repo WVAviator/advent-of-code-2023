@@ -1,9 +1,12 @@
-use super::{adjacent::Adjacent, part_number::PartNumber};
+use std::collections::HashMap;
+
+use super::{adjacent::Adjacent, gear::Gear, part_number::PartNumber};
 
 #[derive(Default)]
 pub struct EngineSchematic {
     schematic: Vec<Vec<char>>,
     part_numbers: Vec<PartNumber>,
+    gears: HashMap<(usize, usize), Gear>,
 }
 
 impl EngineSchematic {
@@ -15,10 +18,15 @@ impl EngineSchematic {
         });
 
         let mut part_numbers = Vec::new();
+        let mut gears = HashMap::new();
 
         for (row_index, row) in schematic.iter().enumerate() {
             let mut col_index = 0;
             while col_index < row.len() {
+                if row.get(col_index).unwrap().eq(&'*') {
+                    let gear = Gear::new();
+                    gears.insert((row_index, col_index), gear);
+                }
                 if let Ok(part_number) = PartNumber::new(row_index, &row, col_index) {
                     part_numbers.push(part_number);
                     col_index += part_number.length;
@@ -28,10 +36,15 @@ impl EngineSchematic {
             }
         }
 
-        EngineSchematic {
+        let mut schematic = EngineSchematic {
             schematic,
             part_numbers,
-        }
+            gears,
+        };
+
+        schematic.connect_all_gears();
+
+        schematic
     }
 
     pub fn get_nums_adjacent_to_symbols(&self) -> Vec<PartNumber> {
@@ -50,8 +63,35 @@ impl EngineSchematic {
             .collect()
     }
 
+    pub fn get_gear_ratios_adjacent_to_two_numbers(&self) -> Vec<u32> {
+        self.gears
+            .iter()
+            .filter(|(_, gear)| gear.is_valid())
+            .map(|(_, gear)| gear.get_ratio())
+            .collect()
+    }
+
+    fn connect_all_gears(&mut self) {
+        self.part_numbers
+            .clone()
+            .iter()
+            .for_each(|part_number| self.connect_gears(part_number));
+    }
+
     fn symbol_adjacent(&self, row: usize, col: usize) -> bool {
-        Adjacent::new(&self.schematic, (row, col)).any(|ch| EngineSchematic::is_symbol(ch))
+        Adjacent::new(&self.schematic, (row, col)).any(|(ch, _, _)| EngineSchematic::is_symbol(ch))
+    }
+
+    fn connect_gears(&mut self, part_number: &PartNumber) {
+        for i in part_number.col..(part_number.col + part_number.length) {
+            Adjacent::new(&self.schematic, (part_number.row, i)).for_each(|(ch, r, c)| {
+                if ch.eq(&'*') {
+                    let gear: &mut Gear =
+                        self.gears.get_mut(&(r, c)).expect("Could not find gear.");
+                    gear.add_part(&part_number);
+                }
+            });
+        }
     }
 
     fn is_symbol(val: char) -> bool {
@@ -117,7 +157,7 @@ mod test {
     }
 
     #[test]
-    fn ch03_is_symbol() {
+    fn ch03_engine_schematic_is_symbol() {
         assert!(EngineSchematic::is_symbol('*'));
         assert!(EngineSchematic::is_symbol('%'));
         assert!(!EngineSchematic::is_symbol('3'));
@@ -125,7 +165,7 @@ mod test {
     }
 
     #[test]
-    fn ch03_symbol_adjacent() {
+    fn ch03_engine_schematic_symbol_adjacent() {
         let schematic = get_test_schematic();
 
         assert!(schematic.symbol_adjacent(1, 1));
@@ -136,7 +176,7 @@ mod test {
     }
 
     #[test]
-    fn ch03_get_nums_adjacent_to_symbols_all() {
+    fn ch03_engine_schematic_get_nums_adjacent_to_symbols_all() {
         let schematic = get_test_schematic();
 
         let expected = schematic.part_numbers.clone();
@@ -144,7 +184,7 @@ mod test {
     }
 
     #[test]
-    fn ch03_get_nums_adjacent_to_symbols_some() {
+    fn ch03_engine_schematic_get_nums_adjacent_to_symbols_some() {
         let input = vec![
             String::from("..123"),
             String::from("12..."),
@@ -160,5 +200,34 @@ mod test {
         }];
 
         assert_eq!(expected, schematic.get_nums_adjacent_to_symbols());
+    }
+
+    #[test]
+    fn ch03_engine_schematic_connect_gears() {
+        let input = vec![
+            String::from("..123"),
+            String::from("10*.."),
+            String::from("....."),
+        ];
+        let mut schematic = EngineSchematic::new(input);
+        for part in schematic.part_numbers.clone() {
+            schematic.connect_gears(&part);
+        }
+        assert_eq!(schematic.gears.len(), 1);
+        schematic.gears.iter().for_each(|(_, gear)| {
+            assert_eq!(gear.get_ratio(), 1230);
+        });
+    }
+
+    #[test]
+    fn ch03_engine_schematic_get_gear_ratios_adjacent_to_two_numbers() {
+        let input = vec![
+            String::from("..123"),
+            String::from("10*.."),
+            String::from("...*2"),
+        ];
+        let schematic = EngineSchematic::new(input);
+        let ratios = schematic.get_gear_ratios_adjacent_to_two_numbers();
+        assert_eq!(ratios, vec![1230]);
     }
 }
