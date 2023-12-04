@@ -2,6 +2,12 @@ use super::score_calculator::ScoreCalculator;
 
 pub struct PowerCalculator {}
 
+impl PowerCalculator {
+    pub fn new() -> Self {
+        PowerCalculator {}
+    }
+}
+
 impl ScoreCalculator for PowerCalculator {
     fn calculate_card(scratchcard: &super::scratchcard::Scratchcard) -> u32 {
         let count = scratchcard.get_matches().len() as u32;
@@ -12,7 +18,7 @@ impl ScoreCalculator for PowerCalculator {
         return base.pow(count - 1);
     }
 
-    fn calculate_total(scratchcards: &Vec<super::scratchcard::Scratchcard>) -> u32 {
+    fn calculate_total(&mut self, scratchcards: &Vec<super::scratchcard::Scratchcard>) -> u32 {
         scratchcards
             .iter()
             .map(|card| PowerCalculator::calculate_card(card))
@@ -39,7 +45,7 @@ mod test {
         let card2 = Scratchcard::parse("Card 2: 13 32 20 16 61 | 61 30 68 82 17 32 24 19");
         let card3 = Scratchcard::parse("Card 3: 87 83 26 28 32 | 88 30 70 12 93 22 82 36");
 
-        let score = PowerCalculator::calculate_total(&vec![card1, card2, card3]);
+        let score = PowerCalculator::new().calculate_total(&vec![card1, card2, card3]);
         assert_eq!(score, 10);
     }
 }

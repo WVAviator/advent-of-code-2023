@@ -1,12 +1,14 @@
 use crate::utils::to_lines_vec;
 
 use self::{
-    power_calculator::PowerCalculator, score_calculator::ScoreCalculator, scratchcard::Scratchcard,
+    copy_calculator::CopyCalculator, power_calculator::PowerCalculator,
+    score_calculator::ScoreCalculator, scratchcard::Scratchcard,
 };
 
 use super::Challenge;
 use std::fs::File;
 
+mod copy_calculator;
 mod power_calculator;
 mod score_calculator;
 mod scratchcard;
@@ -24,12 +26,14 @@ impl Challenge for Scratchcards {
             .collect();
     }
     fn solve_part_one(&self) -> String {
-        let total = PowerCalculator::calculate_total(&self.scratchcards);
+        let total = PowerCalculator::new().calculate_total(&self.scratchcards);
 
         format!("{}", total)
     }
     fn solve_part_two(&self) -> String {
-        format!("Not implemented yet!")
+        let total = CopyCalculator::new().calculate_total(&self.scratchcards);
+
+        format!("{}", total)
     }
 }
 
@@ -58,5 +62,11 @@ mod test {
     fn ch04_scratchcards_part_one() {
         let scratchcards = create_test_case();
         assert_eq!(scratchcards.solve_part_one(), "13");
+    }
+
+    #[test]
+    fn ch04_scratchcards_part_two() {
+        let scratchcards = create_test_case();
+        assert_eq!(scratchcards.solve_part_two(), "30");
     }
 }
