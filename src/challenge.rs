@@ -2,6 +2,7 @@ use std::fs::File;
 
 mod cube_conundrum;
 mod gear_ratios;
+mod scratchcards;
 mod trebuchet;
 
 pub trait Challenge {
@@ -18,6 +19,7 @@ impl ChallengeFactory {
             1 => Box::new(trebuchet::Trebuchet::default()),
             2 => Box::new(cube_conundrum::CubeConundrum::default()),
             3 => Box::new(gear_ratios::GearRatios::default()),
+            4 => Box::new(scratchcards::Scratchcards::default()),
             _ => panic!("Challenge {} not implemented yet!", challenge_id),
         };
 
