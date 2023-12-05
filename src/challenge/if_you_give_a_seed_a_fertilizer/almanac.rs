@@ -19,7 +19,7 @@ impl Almanac {
         Almanac { maps }
     }
 
-    pub fn map_through(&self, seed: u32, from: Resource) -> (u32, Resource) {
+    pub fn map_through(&self, seed: u64, from: Resource) -> (u64, Resource) {
         let mut current_resource = from;
         let mut current_value = seed;
         while let Some(resource_map) = self.maps.get(&current_resource) {

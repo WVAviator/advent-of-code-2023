@@ -11,7 +11,7 @@ mod resource_map;
 
 #[derive(Default)]
 pub struct IfYouGiveASeedAFertilizer {
-    seeds: Vec<u32>,
+    seeds: Vec<u64>,
     almanac: Almanac,
 }
 
@@ -37,7 +37,21 @@ impl Challenge for IfYouGiveASeedAFertilizer {
         format!("{}", min_location)
     }
     fn solve_part_two(&self) -> String {
-        format!("Not implemented yet!")
+        let min_location = self
+            .seeds
+            .chunks(2)
+            .map(|range| {
+                let seed_range = range[0]..(range[0] + range[1]);
+                seed_range
+                    .into_iter()
+                    .map(|seed| self.almanac.map_through(seed, Resource::Seed).0)
+                    .min()
+                    .expect("Could not map through seed value.")
+            })
+            .min()
+            .expect("Could not map through seed value.");
+
+        format!("{}", min_location)
     }
 }
 
@@ -104,5 +118,11 @@ mod test {
     fn ch05_seed_fertilizer_part_one() {
         let seed_fertilizer = get_test_input();
         assert_eq!(seed_fertilizer.solve_part_one(), "35");
+    }
+
+    #[test]
+    fn cho5_seed_fertilizer_part_two() {
+        let seed_fertilizer = get_test_input();
+        assert_eq!(seed_fertilizer.solve_part_two(), "46");
     }
 }

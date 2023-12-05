@@ -33,11 +33,11 @@ impl ResourceMap {
         }
     }
 
-    pub fn map_to(&self, from: u32) -> (u32, Resource) {
+    pub fn map_to(&self, from: u64) -> (u64, Resource) {
         let mut to = from;
         for range in &self.ranges {
-            if range.contains(from.into()) {
-                to = range.map_to(from.into()) as u32;
+            if range.contains(from) {
+                to = range.map_to(from);
             }
         }
 
