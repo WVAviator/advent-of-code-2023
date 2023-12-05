@@ -2,6 +2,7 @@ use std::fs::File;
 
 mod cube_conundrum;
 mod gear_ratios;
+mod if_you_give_a_seed_a_fertilizer;
 mod scratchcards;
 mod trebuchet;
 
@@ -20,6 +21,7 @@ impl ChallengeFactory {
             2 => Box::new(cube_conundrum::CubeConundrum::default()),
             3 => Box::new(gear_ratios::GearRatios::default()),
             4 => Box::new(scratchcards::Scratchcards::default()),
+            5 => Box::new(if_you_give_a_seed_a_fertilizer::IfYouGiveASeedAFertilizer::default()),
             _ => panic!("Challenge {} not implemented yet!", challenge_id),
         };
 
