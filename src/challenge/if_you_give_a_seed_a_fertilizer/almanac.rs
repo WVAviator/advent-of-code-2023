@@ -19,6 +19,17 @@ impl Almanac {
         Almanac { maps }
     }
 
+    pub fn condense(&self) -> ResourceMap {
+        let mut maps = self.maps.clone();
+        let mut current = maps.remove(&Resource::Seed).expect("No seed in map.");
+        while let Some(mut next) = maps.remove(&current.get_to()) {
+            next.merge_maps(&current);
+            current = next;
+        }
+
+        current
+    }
+
     pub fn map_through(&self, seed: u64, from: Resource) -> (u64, Resource) {
         let mut current_resource = from;
         let mut current_value = seed;

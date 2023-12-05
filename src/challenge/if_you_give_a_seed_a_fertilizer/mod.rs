@@ -37,17 +37,11 @@ impl Challenge for IfYouGiveASeedAFertilizer {
         format!("{}", min_location)
     }
     fn solve_part_two(&self) -> String {
+        let resource_map = self.almanac.condense();
         let min_location = self
             .seeds
             .chunks(2)
-            .map(|range| {
-                let seed_range = range[0]..(range[0] + range[1]);
-                seed_range
-                    .into_iter()
-                    .map(|seed| self.almanac.map_through(seed, Resource::Seed).0)
-                    .min()
-                    .expect("Could not map through seed value.")
-            })
+            .map(|range| resource_map.lowest_overlap(range[0], range[1]))
             .min()
             .expect("Could not map through seed value.");
 
