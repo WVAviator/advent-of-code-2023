@@ -30,7 +30,7 @@ impl Almanac {
         current
     }
 
-    pub fn map_through(&self, seed: u64, from: Resource) -> (u64, Resource) {
+    pub fn map_through(&self, seed: num::BigInt, from: Resource) -> (num::BigInt, Resource) {
         let mut current_resource = from;
         let mut current_value = seed;
         while let Some(resource_map) = self.maps.get(&current_resource) {
@@ -73,8 +73,8 @@ mod test {
     fn ch05_almanac_map_through() {
         let almanac = create_test_case();
 
-        let (value, resource) = almanac.map_through(79, Resource::Seed);
-        assert_eq!(value, 81);
+        let (value, resource) = almanac.map_through(num::BigInt::from(79), Resource::Seed);
+        assert_eq!(value, num::BigInt::from(81));
         assert_eq!(resource, Resource::Fertilizer);
     }
 }

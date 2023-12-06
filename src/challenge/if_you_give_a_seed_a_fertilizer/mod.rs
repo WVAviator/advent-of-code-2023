@@ -11,7 +11,7 @@ mod resource_map;
 
 #[derive(Default)]
 pub struct IfYouGiveASeedAFertilizer {
-    seeds: Vec<u64>,
+    seeds: Vec<num::BigInt>,
     almanac: Almanac,
 }
 
@@ -25,7 +25,7 @@ impl Challenge for IfYouGiveASeedAFertilizer {
             .seeds
             .iter()
             .map(|seed| {
-                let (value, resource) = self.almanac.map_through(*seed, Resource::Seed);
+                let (value, resource) = self.almanac.map_through(seed.clone(), Resource::Seed);
                 if resource != Resource::Location {
                     panic!("Could not map seed to location.");
                 }
@@ -41,7 +41,7 @@ impl Challenge for IfYouGiveASeedAFertilizer {
         let min_location = self
             .seeds
             .chunks(2)
-            .map(|range| resource_map.lowest_overlap(range[0], range[1]))
+            .map(|range| resource_map.lowest_overlap(&range[0], &range[1]))
             .min()
             .expect("Could not map through seed value.");
 
