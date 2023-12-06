@@ -1,5 +1,6 @@
 use std::fs::File;
 
+mod wait_for_it;
 mod cube_conundrum;
 mod gear_ratios;
 mod if_you_give_a_seed_a_fertilizer;
@@ -22,6 +23,7 @@ impl ChallengeFactory {
             3 => Box::new(gear_ratios::GearRatios::default()),
             4 => Box::new(scratchcards::Scratchcards::default()),
             5 => Box::new(if_you_give_a_seed_a_fertilizer::IfYouGiveASeedAFertilizer::default()),
+            6 => Box::new(wait_for_it::WaitForIt::default()),
             _ => panic!("Challenge {} not implemented yet!", challenge_id),
         };
 
