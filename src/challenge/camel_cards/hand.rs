@@ -10,13 +10,18 @@ pub struct Hand {
 }
 
 impl Hand {
-    pub fn parse(line: String) -> Self {
+    pub fn parse(line: String, with_joker: bool) -> Self {
         let mut line_iter = line.split(' ');
         let cards = line_iter
             .next()
             .expect("Could not find hand string.")
             .chars()
-            .map(|c| Card::from(c))
+            .map(|c| {
+                if with_joker {
+                    return Card::from_with_joker(c);
+                }
+                Card::from(c)
+            })
             .collect::<Vec<Card>>();
         let bid = line_iter
             .next()
@@ -53,7 +58,7 @@ mod test {
 
     #[test]
     fn ch07_hand_parse() {
-        let hand = Hand::parse(String::from("AAKK5 123"));
+        let hand = Hand::parse(String::from("AAKK5 123"), false);
         assert_eq!(
             hand,
             Hand {
@@ -73,26 +78,32 @@ mod test {
     #[test]
     fn ch07_hand_ord() {
         let mut hands = vec![
-            Hand::parse(String::from("AAKK5 123")),
-            Hand::parse(String::from("TTTT3 123")),
-            Hand::parse(String::from("KKJJ4 123")),
-            Hand::parse(String::from("KK234 123")),
-            Hand::parse(String::from("2AA34 123")),
+            Hand::parse(String::from("AAKK5 123"), false),
+            Hand::parse(String::from("TTTT3 123"), false),
+            Hand::parse(String::from("KKJJ4 123"), false),
+            Hand::parse(String::from("KK234 123"), false),
+            Hand::parse(String::from("2AA34 123"), false),
         ];
 
         hands.sort();
 
         let expected = vec![
-            Hand::parse(String::from("2AA34 123")),
-            Hand::parse(String::from("KK234 123")),
-            Hand::parse(String::from("KKJJ4 123")),
-            Hand::parse(String::from("AAKK5 123")),
-            Hand::parse(String::from("TTTT3 123")),
+            Hand::parse(String::from("2AA34 123"), false),
+            Hand::parse(String::from("KK234 123"), false),
+            Hand::parse(String::from("KKJJ4 123"), false),
+            Hand::parse(String::from("AAKK5 123"), false),
+            Hand::parse(String::from("TTTT3 123"), false),
         ];
 
         assert_eq!(hands, expected);
 
-        assert!(Hand::parse(String::from("KKQQQ 123")) > Hand::parse(String::from("QQJJJ 123")));
-        assert!(Hand::parse(String::from("QQJJJ 123")) > Hand::parse(String::from("KKKJ5 123")));
+        assert!(
+            Hand::parse(String::from("KKQQQ 123"), false)
+                > Hand::parse(String::from("QQJJJ 123"), false)
+        );
+        assert!(
+            Hand::parse(String::from("QQJJJ 123"), false)
+                > Hand::parse(String::from("KKKJ5 123"), false)
+        );
     }
 }

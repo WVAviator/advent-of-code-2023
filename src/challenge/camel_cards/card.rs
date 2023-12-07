@@ -1,5 +1,8 @@
+use std::fmt::Display;
+
 #[derive(Debug, Eq, PartialEq, PartialOrd, Hash, Ord, Clone, Copy)]
 pub enum Card {
+    CJoker,
     C2,
     C3,
     C4,
@@ -33,6 +36,37 @@ impl Card {
             'A' => Card::CA,
             _ => panic!("Attempted to parse invalid card."),
         }
+    }
+
+    pub fn from_with_joker(ch: char) -> Self {
+        if ch == 'J' {
+            return Card::CJoker;
+        }
+
+        Card::from(ch)
+    }
+}
+
+impl Display for Card {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let c = match self {
+            Card::CJoker => 'J',
+            Card::C2 => '2',
+            Card::C3 => '3',
+            Card::C4 => '4',
+            Card::C5 => '5',
+            Card::C6 => '6',
+            Card::C7 => '7',
+            Card::C8 => '8',
+            Card::C9 => '9',
+            Card::CT => 'T',
+            Card::CJ => 'J',
+            Card::CQ => 'Q',
+            Card::CK => 'K',
+            Card::CA => 'A',
+        };
+
+        write!(f, "{}", c)
     }
 }
 

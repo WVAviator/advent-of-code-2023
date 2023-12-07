@@ -13,15 +13,19 @@ mod hand_type;
 
 #[derive(Default)]
 pub struct CamelCards {
-    hands: Vec<Hand>,
+    lines: Vec<String>,
 }
 
 impl Challenge for CamelCards {
     fn load(&mut self, file: &File) {
-        self.load_hands(to_lines_vec(file));
+        self.lines = to_lines_vec(file);
     }
     fn solve_part_one(&self) -> String {
-        let mut hands = self.hands.clone();
+        let mut hands: Vec<Hand> = self
+            .lines
+            .iter()
+            .map(|line| Hand::parse(line.clone(), false))
+            .collect();
         hands.sort();
         let result: BigInt = hands
             .iter()
@@ -34,13 +38,21 @@ impl Challenge for CamelCards {
         format!("{}", result)
     }
     fn solve_part_two(&self) -> String {
-        format!("Not implemented yet!")
-    }
-}
+        let mut hands: Vec<Hand> = self
+            .lines
+            .iter()
+            .map(|line| Hand::parse(line.clone(), true))
+            .collect();
+        hands.sort();
+        let result: BigInt = hands
+            .iter()
+            .enumerate()
+            .fold(BigInt::from(0), |acc, (i, hand)| {
+                let winnings = hand.bid as usize * (i + 1);
+                acc + BigInt::from(winnings)
+            });
 
-impl CamelCards {
-    fn load_hands(&mut self, lines: Vec<String>) {
-        self.hands = lines.into_iter().map(|line| Hand::parse(line)).collect();
+        format!("{}", result)
     }
 }
 
@@ -61,8 +73,16 @@ mod test {
     #[test]
     fn ch07_camel_cards_part_one() {
         let mut camel_cards = CamelCards::default();
-        camel_cards.load_hands(get_input());
+        camel_cards.lines = get_input();
 
         assert_eq!(camel_cards.solve_part_one(), "6440");
+    }
+
+    #[test]
+    fn ch07_camel_cards_part_two() {
+        let mut camel_cards = CamelCards::default();
+        camel_cards.lines = get_input();
+
+        assert_eq!(camel_cards.solve_part_two(), "5905");
     }
 }
