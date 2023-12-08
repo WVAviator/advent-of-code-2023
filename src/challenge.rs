@@ -3,6 +3,7 @@ use std::fs::File;
 mod camel_cards;
 mod cube_conundrum;
 mod gear_ratios;
+mod haunted_wasteland;
 mod if_you_give_a_seed_a_fertilizer;
 mod scratchcards;
 mod trebuchet;
@@ -26,6 +27,7 @@ impl ChallengeFactory {
             5 => Box::new(if_you_give_a_seed_a_fertilizer::IfYouGiveASeedAFertilizer::default()),
             6 => Box::new(wait_for_it::WaitForIt::default()),
             7 => Box::new(camel_cards::CamelCards::default()),
+            8 => Box::new(haunted_wasteland::HauntedWasteland::default()),
             _ => panic!("Challenge {} not implemented yet!", challenge_id),
         };
 
