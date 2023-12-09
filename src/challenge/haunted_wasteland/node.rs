@@ -26,6 +26,13 @@ impl Node {
             _ => panic!("Invalid character in directions."),
         }
     }
+
+    pub fn matches(&self, pattern: &str) -> bool {
+        pattern
+            .chars()
+            .zip(self.address.chars())
+            .all(|(a, b)| a == '_' || a == b)
+    }
 }
 
 #[cfg(test)]
@@ -48,5 +55,19 @@ mod test {
         let node = Node::new(String::from("AAA = (BBB, CCC)"));
         assert_eq!(node.get_next(&'L'), "BBB");
         assert_eq!(node.get_next(&'R'), "CCC");
+    }
+
+    #[test]
+    fn ch08_map_matches() {
+        let node = Node::new(String::from("ABC = (BBB, BBB)"));
+
+        assert!(node.matches("ABC"));
+        assert!(node.matches("A_C"));
+        assert!(node.matches("__C"));
+        assert!(node.matches("___"));
+        assert!(!node.matches("ABD"));
+        assert!(!node.matches("AD_"));
+        assert!(!node.matches("__Z"));
+        assert!(!node.matches("_BF"));
     }
 }

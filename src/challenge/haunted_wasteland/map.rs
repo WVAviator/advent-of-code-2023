@@ -5,8 +5,6 @@ use super::node::Node;
 #[derive(Default)]
 pub struct Map {
     map: HashMap<String, Node>,
-    pub current_location: String,
-    pub steps: u32,
 }
 
 impl Map {
@@ -19,31 +17,24 @@ impl Map {
             })
             .collect::<HashMap<String, Node>>();
 
-        let current_location = String::from("AAA");
-
-        Map {
-            map,
-            current_location,
-            steps: 0,
-        }
+        Map { map }
     }
 
-    pub fn travel(&mut self, direction: &char) -> &str {
-        match direction {
-            'L' | 'R' => {
-                let next_address = self
-                    .map
-                    .get(&self.current_location)
-                    .expect(
-                        format!("Got lost at unknown location: {}", &self.current_location)
-                            .as_str(),
-                    )
-                    .get_next(direction);
-                self.current_location = next_address.clone();
-                self.steps += 1;
+    pub fn iter(&self) -> std::collections::hash_map::Iter<String, Node> {
+        self.map.iter()
+    }
 
-                &self.current_location
-            }
+    pub fn get(&self, key: &str) -> Option<&Node> {
+        self.map.get(key)
+    }
+
+    pub fn travel(&self, location: &str, direction: &char) -> &str {
+        match direction {
+            'L' | 'R' => self
+                .map
+                .get(location)
+                .expect(format!("Got lost at unknown location: {}", location).as_str())
+                .get_next(direction),
             _ => panic!("Cannot travel in the {} direction.", direction),
         }
     }
@@ -74,11 +65,10 @@ mod test {
         ];
         let mut map = Map::new(lines);
 
-        assert_eq!(map.travel(&'L'), "BBB");
-        assert_eq!(map.travel(&'L'), "AAA");
-        assert_eq!(map.travel(&'R'), "BBB");
-        assert_eq!(map.travel(&'R'), "ZZZ");
-        assert_eq!(map.travel(&'L'), "ZZZ");
-        assert_eq!(map.steps, 5);
+        assert_eq!(map.travel("AAA", &'L'), "BBB");
+        assert_eq!(map.travel("BBB", &'L'), "AAA");
+        assert_eq!(map.travel("AAA", &'R'), "BBB");
+        assert_eq!(map.travel("BBB", &'R'), "ZZZ");
+        assert_eq!(map.travel("ZZZ", &'L'), "ZZZ");
     }
 }
