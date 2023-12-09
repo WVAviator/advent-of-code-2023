@@ -1,5 +1,5 @@
 pub struct History {
-    sequence: Vec<i32>,
+    extrapolated_rows: Vec<Vec<i32>>,
 }
 
 impl History {
@@ -8,12 +8,13 @@ impl History {
             .split(' ')
             .map(|v| v.parse::<i32>().expect("Could not convert to number."))
             .collect();
-        History { sequence }
+        let extrapolated_rows = History::extrapolate_rows(sequence);
+        History { extrapolated_rows }
     }
 
-    pub fn extrapolate_next(&self) -> i32 {
+    fn extrapolate_rows(sequence: Vec<i32>) -> Vec<Vec<i32>> {
         let mut rows = Vec::new();
-        let mut next_row: Vec<i32> = self.sequence.clone();
+        let mut next_row: Vec<i32> = sequence;
         rows.push(next_row.clone());
 
         loop {
@@ -29,10 +30,23 @@ impl History {
             }
         }
 
-        rows.iter()
+        rows
+    }
+
+    pub fn extrapolate_next(&self) -> i32 {
+        self.extrapolated_rows
+            .iter()
             .rev()
             .map(|row| row.last().expect("No last element in row found."))
             .fold(0, |acc, cur| acc + cur)
+    }
+
+    pub fn extrapolate_prev(&self) -> i32 {
+        self.extrapolated_rows
+            .iter()
+            .rev()
+            .map(|row| row.first().expect("No first element found in row."))
+            .fold(0, |acc, cur| cur - acc)
     }
 }
 
@@ -50,5 +64,11 @@ mod test {
     fn ch09_history_extrapolate_next_ascending() {
         let history = History::new(&String::from("1 3 6 10 15 21"));
         assert_eq!(history.extrapolate_next(), 28);
+    }
+
+    #[test]
+    fn ch09_history_extrapolate_prev() {
+        let history = History::new(&String::from("10 13 16 21 30 45"));
+        assert_eq!(history.extrapolate_prev(), 5);
     }
 }
