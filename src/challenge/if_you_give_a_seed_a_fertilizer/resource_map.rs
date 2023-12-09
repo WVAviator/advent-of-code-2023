@@ -135,7 +135,7 @@ impl ResourceMap {
 }
 
 #[derive(PartialEq, Debug, Clone, PartialOrd, Ord, Eq)]
-struct MapRange {
+pub struct MapRange {
     from_start: num::BigInt,
     to_start: num::BigInt,
     length: num::BigInt,

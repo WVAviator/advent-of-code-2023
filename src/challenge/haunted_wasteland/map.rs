@@ -24,10 +24,6 @@ impl Map {
         self.map.iter()
     }
 
-    pub fn get(&self, key: &str) -> Option<&Node> {
-        self.map.get(key)
-    }
-
     pub fn travel(&self, location: &str, direction: &char) -> &str {
         match direction {
             'L' | 'R' => self
@@ -63,7 +59,7 @@ mod test {
             String::from("BBB = (AAA, ZZZ)"),
             String::from("ZZZ = (ZZZ, ZZZ)"),
         ];
-        let mut map = Map::new(lines);
+        let map = Map::new(lines);
 
         assert_eq!(map.travel("AAA", &'L'), "BBB");
         assert_eq!(map.travel("BBB", &'L'), "AAA");

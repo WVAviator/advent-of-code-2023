@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use super::{card::Card, hand_type::HandType};
 
 #[derive(Debug, Eq, PartialEq, Ord, Clone)]
