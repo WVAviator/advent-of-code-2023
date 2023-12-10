@@ -6,6 +6,7 @@ mod gear_ratios;
 mod haunted_wasteland;
 mod if_you_give_a_seed_a_fertilizer;
 mod mirage_maintenance;
+mod pipe_maze;
 mod scratchcards;
 mod trebuchet;
 mod wait_for_it;
@@ -30,6 +31,7 @@ impl ChallengeFactory {
             7 => Box::new(camel_cards::CamelCards::default()),
             8 => Box::new(haunted_wasteland::HauntedWasteland::default()),
             9 => Box::new(mirage_maintenance::MirageMaintenance::default()),
+            10 => Box::new(pipe_maze::PipeMaze::default()),
             _ => panic!("Challenge {} not implemented yet!", challenge_id),
         };
 
